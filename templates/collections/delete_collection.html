@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Delete Collection</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger">Delete</button>
+</form>
+
+{% endblock %}
