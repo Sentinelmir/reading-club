@@ -18,5 +18,5 @@ class Collection(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.collection_slug:
-            self.collection_slug = slugify(self.collection_slug)
+            self.collection_slug = slugify(self.title)
         super().save(*args, **kwargs)

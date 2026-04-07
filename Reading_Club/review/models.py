@@ -10,6 +10,8 @@ class Review(models.Model):
     text = models.TextField(max_length=300)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="review_author", null=True, blank=True)
     rating = models.PositiveIntegerField(validators = [MinValueValidator(1), MaxValueValidator(5)])
+    date_of_publication = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.book.name} — {self.author.nickname} ({self.rating}/5)"
+        author_name = self.author.nickname if self.author else "Anonymous"
+        return f"{self.book.name} — {author_name} ({self.rating}/5)"

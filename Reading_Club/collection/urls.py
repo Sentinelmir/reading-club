@@ -1,5 +1,7 @@
 from django.urls import path, include
 
+from Reading_Club.collection.views import CollectionListView, CreateCollectionView, CollectionDetailsView, CollectionEditView, CollectionDeleteView
+
 app_name = 'collections'
 
 urlpatterns = [
@@ -9,7 +11,7 @@ urlpatterns = [
         [
             path('', CollectionDetailsView.as_view(), name='details'),
             path('edit/', CollectionEditView.as_view(), name='edit'),
-            path('delete', CollectionDelteView.as_view(), name='delete'),
+            path('delete', CollectionDeleteView.as_view(), name='delete'),
         ]
     ))
 ]

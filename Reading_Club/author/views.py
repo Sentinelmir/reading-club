@@ -1,13 +1,15 @@
 from django.shortcuts import render
+from django.views import View
 
-class AuthorCreateView():
+
+class AuthorCreateView(View):
     pass
 
-class AuthorDetailsView():
+class AuthorDetailsView(View):
     pass
 
-class AuthorEditView():
+class AuthorEditView(View):
     pass
 
-class AuthorDeleteView():
+class AuthorDeleteView(View):
     pass

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from Reading_Club.author.views import AuthorCreateView, AuthorDetailsView, AuthorDeleteView, AuthorEditView
 
-app_name = 'autor'
+app_name = 'author'
 
 urlpatterns = [
     path('add_new/', AuthorCreateView.as_view(), name='create'),
@@ -9,7 +9,7 @@ urlpatterns = [
             [
                 path('', AuthorDetailsView.as_view(), name='details'),
                 path('edit/', AuthorEditView.as_view(), name='edit'),
-                path('', AuthorDeleteView.as_view(), name='delete'),
+                path('delete/', AuthorDeleteView.as_view(), name='delete'),
             ]
         ),
     ),

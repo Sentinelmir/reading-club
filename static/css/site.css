@@ -163,3 +163,14 @@ a.link-secondary:hover {
   max-width: 1320px;
 }
 
+.book-cover-detail {
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+.btn-outline-dark:hover {
+  background-color: #e9ecef;
+  color: gray;
+  border-color: #ced4da;
+}

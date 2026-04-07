@@ -1,16 +1,18 @@
 from django.shortcuts import render
+from django.views import View
 
-class UserLoginView():
+
+class UserLoginView(View):
     pass
 
-class UserRegisterView():
+class UserRegisterView(View):
     pass
 
-class UserLogoutView():
+class UserLogoutView(View):
     pass
 
-class ProfileDetailsView():
+class ProfileDetailsView(View):
     pass
 
-class ProfileEditeView():
+class ProfileEditeView(View):
     pass
