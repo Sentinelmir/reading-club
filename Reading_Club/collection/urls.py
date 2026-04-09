@@ -7,11 +7,11 @@ app_name = 'collections'
 urlpatterns = [
     path('', CollectionListView.as_view(), name='list'),
     path('add/', CreateCollectionView.as_view(), name='create'),
-    path('<slug:collection_slug>', include(
+    path('<slug:slug>/', include(
         [
             path('', CollectionDetailsView.as_view(), name='details'),
             path('edit/', CollectionEditView.as_view(), name='edit'),
-            path('delete', CollectionDeleteView.as_view(), name='delete'),
+            path('delete/', CollectionDeleteView.as_view(), name='delete'),
         ]
     ))
 ]

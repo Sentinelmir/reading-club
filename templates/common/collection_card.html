@@ -1,8 +1,42 @@
-<div class="col-md-4">
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h5>Collection title</h5>
-      <p class="text-muted small">Created by user</p>
+<div class="col-md-6 col-lg-4">
+  <div class="card h-100 shadow-sm border-0">
+    {% if collection.cover %}
+      <img src="{{ collection.cover.url }}"
+           class="card-img-top"
+           alt="{{ collection.title }}"
+           style="height: 240px; object-fit: cover;">
+    {% else %}
+      <img src="https://via.placeholder.com/500x300"
+           class="card-img-top"
+           alt="No cover"
+           style="height: 240px; object-fit: cover;">
+    {% endif %}
+
+    <div class="card-body d-flex flex-column">
+      <h3 class="h5 mb-2">{{ collection.title }}</h3>
+
+      <p class="small text-muted mb-2">
+        {% if collection.created_by %}
+          By {{ collection.created_by }}
+        {% else %}
+          By unknown user
+        {% endif %}
+      </p>
+
+      <p class="small text-muted mb-3">
+        {{ collection.description|truncatechars:120 }}
+      </p>
+
+      <p class="small text-muted mb-3">
+        Books: {{ collection.books.count }}
+      </p>
+
+      <div class="mt-auto">
+        <a href="{% url 'collections:details' collection.collection_slug %}"
+           class="btn btn-sm btn-outline-secondary">
+          Details
+        </a>
+      </div>
     </div>
   </div>
 </div>

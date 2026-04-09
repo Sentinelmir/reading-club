@@ -1,11 +1,67 @@
 {% extends "base.html" %}
+{% block title %}
+  {% if form.instance.pk %}Edit collection · BookWorld{% else %}Add collection · BookWorld{% endif %}
+{% endblock %}
+
 {% block content %}
 
-<h2>Collection</h2>
+<div class="d-flex justify-content-center py-5">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 700px;">
+    <h2 class="mb-4 text-center">
+      {% if form.instance.pk %}
+        Edit Collection
+      {% else %}
+        Add Collection
+      {% endif %}
+    </h2>
 
-<form method="post">
-  {% csrf_token %}
-  <button class="btn btn-primary">Save</button>
-</form>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {% for field in form %}
+        {% if field.name != 'cover' %}
+          <p>
+            {{ field.label_tag }}
+            {{ field }}
+            {{ field.errors }}
+          </p>
+        {% endif %}
+      {% endfor %}
+
+      {% if form.instance.pk %}
+        <p>
+          <strong>Collection cover:</strong><br>
+          {% if form.instance.cover %}
+            <a href="{{ form.instance.cover.url }}" style="color: #6b4c3b; text-decoration: none;">
+              {{ form.instance.cover.name }}
+            </a>
+          {% else %}
+            <span class="text-muted">No cover uploaded</span>
+          {% endif %}
+        </p>
+      {% endif %}
+
+      <p>
+        <strong>{% if form.instance.pk %}Change:{% else %}Collection cover:{% endif %}</strong><br>
+        <input type="file" name="{{ form.cover.name }}" id="{{ form.cover.id_for_label }}" class="form-control">
+        {{ form.cover.errors }}
+      </p>
+
+      <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-primary" type="submit">Save</button>
+
+        {% if form.instance.pk %}
+          <a href="{% url 'collections:details' form.instance.collection_slug %}" class="btn btn-outline-secondary">
+            Cancel
+          </a>
+        {% else %}
+          <a href="{% url 'collections:list' %}" class="btn btn-outline-secondary">
+            Cancel
+          </a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
 
 {% endblock %}

@@ -40,42 +40,7 @@
 
 <div class="row g-4">
   {% for book in books %}
-    <div class="col-md-6 col-lg-3">
-      <div class="book-card card h-100 shadow-sm border-0">
-        {% if book.book_cover %}
-          <img src="{{ book.book_cover.url }}" class="card-img-top" alt="{{ book.name }}">
-        {% else %}
-          <img src="https://via.placeholder.com/500x650" class="card-img-top" alt="No cover">
-        {% endif %}
-
-        <div class="card-body">
-          <h3 class="h6 mb-1">{{ book.name }}</h3>
-
-          <p class="small text-muted mb-2">
-            {% if book.author %}
-              {{ book.author }}
-            {% else %}
-              Unknown author
-            {% endif %}
-          </p>
-
-          <p class="small text-muted mb-3">{{ book.get_genre_display }}</p>
-        <p class="small text-muted mb-2">
-              Rating:
-              {% if book.average_rating %}
-                {{ book.average_rating }}
-              {% else %}
-                No rating
-              {% endif %}
-            </p>
-
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-sm btn-outline-danger">♥</button>
-            <a href="{% url 'books:details' book.book_slug %}" class="btn btn-sm btn-outline-secondary">Details</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include "common/book_card.html" %}
   {% empty %}
     <div class="col-12">
       <div class="alert alert-info mb-0">
@@ -83,5 +48,6 @@
       </div>
     </div>
   {% endfor %}
+</div>
 </div>
 {% endblock %}

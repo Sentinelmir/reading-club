@@ -1,10 +1,24 @@
 {% extends "base.html" %}
+{% block title %}Collections · BookWorld{% endblock %}
+
 {% block content %}
-
-<h1>Collections</h1>
-
-<div class="row g-3">
-  {% include "common/collection_card.html" %}
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+  <div>
+    <h1 class="h3 mb-1">Collections</h1>
+    <p class="text-muted mb-0">Browse all collections created by readers.</p>
+  </div>
+  <a href="{% url 'collections:create' %}" class="btn btn-primary">Add collection</a>
 </div>
 
+<div class="row g-4">
+  {% for collection in collections %}
+    {% include "common/collection_card.html" %}
+  {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info mb-0">
+        No collections found.
+      </div>
+    </div>
+  {% endfor %}
+</div>
 {% endblock %}

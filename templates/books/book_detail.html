@@ -53,7 +53,7 @@
             Edit
           </a>
 
-          <a href="#" class="btn btn-outline-dark d-inline-flex align-items-center justify-content-center">
+          <a href="{% url 'books:delete' book.book_slug %}" class="btn btn-outline-dark d-inline-flex align-items-center justify-content-center">
               Delete
           </a>
         </div>
@@ -111,3 +111,4 @@
 </div>
 
 {% endblock %}
+</div>

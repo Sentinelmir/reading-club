@@ -1,29 +1,50 @@
 {% extends "base.html" %}
-{% block title %}Collection · BookWorld{% endblock %}
+{% block title %}{{ collection.title }} · BookWorld{% endblock %}
 
 {% block content %}
 
-<div class="card border-0 shadow-sm mb-4">
-  <img src="https://picsum.photos/seed/collection/1200/380" class="card-img-top" alt="Collection banner" style="max-height: 320px; object-fit: cover;">
+<div class="card border-0 shadow-sm mb-4 overflow-hidden">
+  {% if collection.cover %}
+    <img src="{{ collection.cover.url }}"
+         class="card-img-top"
+         alt="{{ collection.title }}"
+         style="max-height: 320px; object-fit: cover;">
+  {% else %}
+    <img src="https://picsum.photos/seed/collection/1200/380"
+         class="card-img-top"
+         alt="Collection banner"
+         style="max-height: 320px; object-fit: cover;">
+  {% endif %}
 
   <div class="card-body p-4">
-    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-3">
-      <div>
-        <h1 class="h3 mb-2">Collection Title</h1>
-        <p class="text-muted mb-2">Created by username</p>
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-9">
+        <h1 class="h3 mb-2">{{ collection.title }}</h1>
+
+        <p class="text-muted mb-3">
+          {% if collection.created_by %}
+            Created by {{ collection.created_by }}
+          {% else %}
+            Created by unknown user
+          {% endif %}
+        </p>
+
         <p class="mb-0">
-          This is a placeholder description for the collection. Later you can replace
-          it with the real collection description from the database.
+          {{ collection.description }}
         </p>
       </div>
 
-      <div class="text-lg-end">
-        <div class="fs-5 fw-semibold">8 books</div>
-        <div class="text-muted small mb-3">In this collection</div>
+      <div class="col-lg-3">
+        <div class="border rounded-4 p-3 h-100">
+          <div class="fs-3 fw-bold">{{ collection.books.count }}</div>
+          <div class="text-muted small mb-3">
+            book{{ collection.books.count|pluralize }} in this collection
+          </div>
 
-        <div class="d-flex flex-column gap-2">
-          <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
-          <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+          <div class="d-grid gap-2">
+            <a href="{% url 'collections:edit' collection.collection_slug %}" class="btn btn-outline-secondary">Edit</a>
+            <a href="{% url 'collections:delete' collection.collection_slug %}" class="btn btn-outline-danger">Delete</a>
+          </div>
         </div>
       </div>
     </div>
@@ -35,75 +56,15 @@
 </div>
 
 <div class="row g-4">
-
-  <div class="col-md-6 col-lg-3">
-    <div class="card h-100 shadow-sm border-0">
-      <img src="https://picsum.photos/seed/cb1/500/650" class="card-img-top" alt="Book cover">
-
-      <div class="card-body">
-        <h3 class="h6 mb-1">Book title</h3>
-        <p class="text-muted small mb-2">Author Name</p>
-        <p class="text-muted small mb-3">Fantasy</p>
-
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-sm btn-outline-danger">♥</button>
-          <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-        </div>
+  {% for book in collection.books.all %}
+    {% include "common/book_card.html" %}
+  {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info mb-0">
+        There are no books in this collection yet.
       </div>
     </div>
-  </div>
-
-  <div class="col-md-6 col-lg-3">
-    <div class="card h-100 shadow-sm border-0">
-      <img src="https://picsum.photos/seed/cb2/500/650" class="card-img-top" alt="Book cover">
-
-      <div class="card-body">
-        <h3 class="h6 mb-1">Another book</h3>
-        <p class="text-muted small mb-2">Author Name</p>
-        <p class="text-muted small mb-3">Drama</p>
-
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-sm btn-outline-danger">♥</button>
-          <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-6 col-lg-3">
-    <div class="card h-100 shadow-sm border-0">
-      <img src="https://picsum.photos/seed/cb3/500/650" class="card-img-top" alt="Book cover">
-
-      <div class="card-body">
-        <h3 class="h6 mb-1">Third book</h3>
-        <p class="text-muted small mb-2">Author Name</p>
-        <p class="text-muted small mb-3">Romance</p>
-
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-sm btn-outline-danger">♥</button>
-          <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-6 col-lg-3">
-    <div class="card h-100 shadow-sm border-0">
-      <img src="https://picsum.photos/seed/cb4/500/650" class="card-img-top" alt="Book cover">
-
-      <div class="card-body">
-        <h3 class="h6 mb-1">Fourth book</h3>
-        <p class="text-muted small mb-2">Author Name</p>
-        <p class="text-muted small mb-3">Science</p>
-
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-sm btn-outline-danger">♥</button>
-          <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  {% endfor %}
 </div>
 
 {% endblock %}
