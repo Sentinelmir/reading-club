@@ -42,8 +42,10 @@
           </div>
 
           <div class="d-grid gap-2">
-            <a href="{% url 'collections:edit' collection.collection_slug %}" class="btn btn-outline-secondary">Edit</a>
-            <a href="{% url 'collections:delete' collection.collection_slug %}" class="btn btn-outline-danger">Delete</a>
+            {% if request.user == collection.created_by or request.user.is_superuser %}
+              <a href="{% url 'collections:edit' slug=collection.collection_slug %}" class="btn btn-outline-secondary">Edit</a>
+              <a href="{% url 'collections:delete' slug=collection.collection_slug %}" class="btn btn-outline-dark">Delete</a>
+            {% endif %}
           </div>
         </div>
       </div>

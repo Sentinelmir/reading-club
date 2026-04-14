@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{% if object %}Edit Review{% else %}Add Review{% endif %} · BookWorld{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <div class="form-card">
+    <h2 class="form-title">
+      {% if object %}
+        Edit Review
+      {% else %}
+        Add Review
+      {% endif %}
+    </h2>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        {{ form.text.label_tag }}
+        {{ form.text }}
+        {{ form.text.errors }}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label d-block">Rating</label>
+
+        <div class="star-rating">
+          <input type="radio" name="rating" id="star5" value="5" {% if form.rating.value == '5' or form.rating.value == 5 %}checked{% endif %}>
+          <label for="star5">★</label>
+
+          <input type="radio" name="rating" id="star4" value="4" {% if form.rating.value == '4' or form.rating.value == 4 %}checked{% endif %}>
+          <label for="star4">★</label>
+
+          <input type="radio" name="rating" id="star3" value="3" {% if form.rating.value == '3' or form.rating.value == 3 %}checked{% endif %}>
+          <label for="star3">★</label>
+
+          <input type="radio" name="rating" id="star2" value="2" {% if form.rating.value == '2' or form.rating.value == 2 %}checked{% endif %}>
+          <label for="star2">★</label>
+
+          <input type="radio" name="rating" id="star1" value="1" {% if form.rating.value == '1' or form.rating.value == 1 %}checked{% endif %}>
+          <label for="star1">★</label>
+        </div>
+
+        {{ form.rating.errors }}
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+          {% if object %}
+            Save changes
+          {% else %}
+            Add review
+          {% endif %}
+        </button>
+
+        {% if object %}
+          <a href="{% url 'books:details' slug=object.book.book_slug %}" class="btn btn-outline-secondary">Cancel</a>
+        {% else %}
+          <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancel</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

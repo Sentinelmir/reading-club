@@ -8,7 +8,7 @@ from Reading_Club.book.models import Book
 class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reviews")
     text = models.TextField(max_length=300)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="review_author", null=True, blank=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True)
     rating = models.PositiveIntegerField(validators = [MinValueValidator(1), MaxValueValidator(5)])
     date_of_publication = models.DateTimeField(auto_now=True)
 

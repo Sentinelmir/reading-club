@@ -16,11 +16,13 @@
       <h3 class="h6 mb-1">{{ book.name }}</h3>
 
       <p class="small text-muted mb-2">
-        {% if book.author %}
-          {{ book.author }}
-        {% else %}
-          Unknown author
-        {% endif %}
+          {% if book.author %}
+            <a href="{% url 'author:details' author_slug=book.author.author_slug %}" class="text-decoration-none text-muted">
+              {{ book.author }}
+            </a>
+          {% else %}
+            Unknown author
+          {% endif %}
       </p>
 
       <p class="small text-muted mb-2">{{ book.get_genre_display }}</p>
@@ -34,12 +36,24 @@
         {% endif %}
       </p>
 
-      <div class="mt-auto d-flex justify-content-between">
-        <button class="btn btn-sm btn-outline-danger">♥</button>
-        <a href="{% url 'books:details' book.book_slug %}" class="btn btn-sm btn-outline-secondary">
-          Details
-        </a>
-      </div>
+      <div class="mt-auto d-flex justify-content-between align-items-center">
+  {% if request.user.is_authenticated %}
+    <form method="post" action="{% url 'books:favorite' slug=book.book_slug %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm {% if book in request.user.wishlist.all %}btn-danger{% else %}btn-outline-danger{% endif %}">
+        ♥
+      </button>
+    </form>
+  {% else %}
+    <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-outline-danger">
+      ♥
+    </a>
+  {% endif %}
+
+  <a href="{% url 'books:details' book.book_slug %}" class="btn btn-sm btn-outline-secondary">
+    Details
+  </a>
+</div>
     </div>
   </div>
 </div>

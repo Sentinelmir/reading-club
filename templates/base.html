@@ -24,6 +24,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="{% url 'homepage' %}">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'books:list' %}">Books</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'author:list' %}">Authors</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'collections:list' %}">Collections</a></li>
           {% if request.user.is_authenticated %}
               <li class="nav-item"><a class="nav-link" href="{% url 'accounts:details' %}">Profile</a></li>

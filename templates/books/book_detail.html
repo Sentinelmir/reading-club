@@ -28,7 +28,11 @@
           <div>
             <h1 class="h2 mb-2">{{ book.name }}</h1>
             <p class="text-muted mb-1">{{ book.genre|title }}</p>
-            <p class="text-muted mb-1">{{ book.author }}</p>
+            <p class="text-muted mb-1">
+              <a href="{% url 'author:details' author_slug=book.author.author_slug %}" class="text-decoration-none text-muted">
+                {{ book.author }}
+              </a>
+            </p>
           </div>
 
           <span class="badge rounded-pill text-bg-light px-3 py-2">
@@ -41,21 +45,38 @@
         </div>
 
         <div class="d-flex flex-wrap gap-2 mb-4">
-          <button type="button" class="btn btn-outline-danger">
-            ♥ Add to favorites
-          </button>
+          {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'books:favorite' slug=book.book_slug %}">
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="btn {% if book in request.user.wishlist.all %}btn-danger{% else %}btn-outline-danger{% endif %}"
+              >
+                ♥
+              </button>
+            </form>
 
-          <button type="button" class="btn btn-outline-success">
-            ✓ Mark as read
-          </button>
+            <form method="post" action="{% url 'books:read' slug=book.book_slug %}">
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="btn {% if book in request.user.read_list.all %}btn-success{% else %}btn-outline-success{% endif %}"
+              >
+                ✓
+              </button>
+            </form>
+          {% endif %}
 
-          <a href="{% url 'books:edit' book.book_slug %}" class="btn btn-outline-secondary">
-            Edit
-          </a>
-
-          <a href="{% url 'books:delete' book.book_slug %}" class="btn btn-outline-dark d-inline-flex align-items-center justify-content-center">
-              Delete
-          </a>
+          {% if request.user.is_authenticated %}
+              <a href="{% url 'books:edit' book.book_slug %}" class="btn btn-outline-secondary">
+                Edit
+              </a>
+            {% endif %}
+            {% if request.user == book.created_by or request.user.is_superuser %}
+              <a href="{% url 'books:delete' book.book_slug %}" class="btn btn-outline-dark d-inline-flex align-items-center justify-content-center">
+                Delete
+              </a>
+            {% endif %}
         </div>
 
         <h2 class="h5 mb-3">Description</h2>
@@ -66,49 +87,61 @@
     </div>
 
     <div class="card border-0 shadow-sm">
-  <div class="card-body p-4">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="h5 mb-0">Reviews</h2>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="h5 mb-0">Reviews</h2>
-      <a href="#" class="btn btn-sm btn-primary">Add review</a>
-    </div>
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'reviews:create' slug=book.book_slug %}" class="btn btn-primary">
+              Add review
+            </a>
+          {% endif %}
+        </div>
 
-    {% if book.reviews.all %}
-      {% for review in book.reviews.all %}
-        <div class="border rounded-3 p-3 mb-3">
+        {% for review in book.reviews.all %}
+          <div class="border rounded-3 p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+              <div>
+                <strong>
+                  {% if review.author.nickname %}
+                    {{ review.author.nickname }}
+                  {% else %}
+                    {{ review.author.username }}
+                  {% endif %}
+                </strong>
 
-          <div class="d-flex justify-content-between align-items-start mb-1">
-            <div>
-              <strong>
-                {% if review.author %}
-                  {{ review.author.nickname }}
-                {% else %}
-                  Anonymous
+                <div class="text-muted small">
+                  {{ review.date_of_publication|date:"d M Y" }}
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge text-bg-light">
+                  {{ review.rating }} / 5
+                </span>
+
+                {% if request.user == review.author %}
+                  <a href="{% url 'reviews:edit' review.pk %}" class="btn btn-sm btn-outline-secondary">
+                    Edit
+                  </a>
                 {% endif %}
-              </strong>
-              <div class="text-muted small">
-                {{ review.date_of_publication|date:"d M Y" }}
+                {% if request.user == review.author or request.user.is_superuser %}
+                  <a href="{% url 'reviews:delete' review.pk %}" class="btn btn-sm btn-outline-dark">
+                    Delete
+                  </a>
+                {% endif %}
               </div>
             </div>
 
-            <span class="badge text-bg-light">
-              {{ review.rating }} / 5
-            </span>
+            <p class="mb-0">
+              {{ review.text }}
+            </p>
           </div>
-
-          <p class="mb-0 mt-2">
-            {{ review.text }}
-          </p>
-
-        </div>
-      {% endfor %}
-    {% else %}
-      <p class="text-muted mb-0">No reviews yet.</p>
-    {% endif %}
-
+        {% empty %}
+          <p class="text-muted mb-0">No reviews yet.</p>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
-</div>
-
 {% endblock %}
-</div>

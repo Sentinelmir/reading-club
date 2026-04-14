@@ -12,17 +12,37 @@
         keep favorites, and create your own themed collections.
       </p>
       <div class="d-flex flex-wrap gap-2">
-        <a href="#" class="btn btn-primary">Browse books</a>
-        <a href="#" class="btn btn-outline-secondary">Create collection</a>
+        <a href="{% url 'books:list' %}" class="btn btn-primary">Browse books</a>
+        <a href="{% url 'collections:list' %}" class="btn btn-outline-secondary">Collections</a>
       </div>
     </div>
 
     <div class="col-lg-5">
       <div class="hero-card p-4 rounded-4 shadow-sm">
         <h2 class="h5 mb-3">Quick preview</h2>
-        <div class="small text-muted mb-2">Favorites: 12 books</div>
-        <div class="small text-muted mb-2">Read: 28 books</div>
-        <div class="small text-muted">Collections: 4</div>
+
+        {% if request.user.is_authenticated %}
+          <div class="small text-muted mb-2">
+            Favorites: {{ request.user.wishlist.count }} book{{ request.user.wishlist.count|pluralize }}
+          </div>
+
+          <div class="small text-muted mb-2">
+            Read: {{ request.user.read_list.count }} book{{ request.user.read_list.count|pluralize }}
+          </div>
+
+          <div class="small text-muted">
+            Collections: {{ request.user.created_collection.count }}
+          </div>
+        {% else %}
+          <p class="small text-muted mb-3">
+            Sign in or create an account to see your reading lists here.
+          </p>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-primary">Login</a>
+            <a href="{% url 'accounts:register' %}" class="btn btn-sm btn-outline-secondary">Register</a>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -30,112 +50,35 @@
 
 <section class="mb-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h4 mb-0">Featured books</h2>
-    <a href="#" class="link-secondary text-decoration-none">See all</a>
+    <h2 class="h4 mb-0">Latest books</h2>
+    <a href="{% url 'books:list' %}" class="link-secondary text-decoration-none">See all</a>
   </div>
 
   <div class="row g-4">
-    <div class="col-md-6 col-lg-3">
-      <div class="book-card card h-100 shadow-sm border-0">
-        <img src="https://via.placeholder.com/500x650" class="card-img-top" alt="Book cover">
-        <div class="card-body">
-          <h3 class="h6 card-title mb-1">The Silent Library</h3>
-          <p class="small text-muted mb-2">Publisher Name</p>
-          <p class="small text-muted mb-3">Fantasy</p>
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-sm btn-outline-danger">♥</button>
-            <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-          </div>
-        </div>
+    {% for book in latest_books %}
+      {% include "common/book_card.html" %}
+    {% empty %}
+      <div class="col-12">
+        <p class="text-muted mb-0">No books have been added yet.</p>
       </div>
-    </div>
-
-    <div class="col-md-6 col-lg-3">
-      <div class="book-card card h-100 shadow-sm border-0">
-        <img src="https://via.placeholder.com/500x650" class="card-img-top" alt="Book cover">
-        <div class="card-body">
-          <h3 class="h6 card-title mb-1">Brown Autumn</h3>
-          <p class="small text-muted mb-2">Publisher Name</p>
-          <p class="small text-muted mb-3">Drama</p>
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-sm btn-outline-danger">♥</button>
-            <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-lg-3">
-      <div class="book-card card h-100 shadow-sm border-0">
-        <img src="https://via.placeholder.com/500x650" class="card-img-top" alt="Book cover">
-        <div class="card-body">
-          <h3 class="h6 card-title mb-1">Winter Letters</h3>
-          <p class="small text-muted mb-2">Publisher Name</p>
-          <p class="small text-muted mb-3">Romance</p>
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-sm btn-outline-danger">♥</button>
-            <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-lg-3">
-      <div class="book-card card h-100 shadow-sm border-0">
-        <img src="https://via.placeholder.com/500x650" class="card-img-top" alt="Book cover">
-        <div class="card-body">
-          <h3 class="h6 card-title mb-1">Quiet Science</h3>
-          <p class="small text-muted mb-2">Publisher Name</p>
-          <p class="small text-muted mb-3">Science</p>
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-sm btn-outline-danger">♥</button>
-            <a href="#" class="btn btn-sm btn-outline-secondary">Details</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </section>
 
 <section>
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h4 mb-0">Popular collections</h2>
-    <a href="#" class="link-secondary text-decoration-none">See all</a>
+    <h2 class="h4 mb-0">Latest collections</h2>
+    <a href="{% url 'collections:list' %}" class="link-secondary text-decoration-none">See all</a>
   </div>
 
   <div class="row g-4">
-    <div class="col-md-6 col-lg-4">
-      <div class="collection-card card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <h3 class="h5 mb-2">Best Fantasy Reads</h3>
-          <p class="small text-muted mb-2">Created by username</p>
-          <p class="mb-3">A curated collection of atmospheric fantasy books.</p>
-          <a href="#" class="btn btn-sm btn-outline-secondary">Open</a>
-        </div>
+    {% for collection in latest_collections %}
+      {% include "common/collection_card.html" %}
+    {% empty %}
+      <div class="col-12">
+        <p class="text-muted mb-0">No collections have been added yet.</p>
       </div>
-    </div>
-
-    <div class="col-md-6 col-lg-4">
-      <div class="collection-card card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <h3 class="h5 mb-2">Books for Autumn</h3>
-          <p class="small text-muted mb-2">Created by username</p>
-          <p class="mb-3">Warm, quiet, reflective books for slow evenings.</p>
-          <a href="#" class="btn btn-sm btn-outline-secondary">Open</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-lg-4">
-      <div class="collection-card card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <h3 class="h5 mb-2">Modern Classics</h3>
-          <p class="small text-muted mb-2">Created by username</p>
-          <p class="mb-3">A starter list for readers who want modern essentials.</p>
-          <a href="#" class="btn btn-sm btn-outline-secondary">Open</a>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </section>
 {% endblock %}

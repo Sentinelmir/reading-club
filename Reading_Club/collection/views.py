@@ -1,6 +1,5 @@
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from Reading_Club.collection.forms import CollectionForm
 from Reading_Club.collection.models import Collection
@@ -11,7 +10,7 @@ class CollectionListView(ListView):
     template_name = 'collections/collection_list.html'
     context_object_name = 'collections'
 
-class CreateCollectionView(CreateView):
+class CreateCollectionView(LoginRequiredMixin, CreateView):
     model = Collection
     form_class = CollectionForm
     template_name = 'collections/collection_form.html'
@@ -28,17 +27,27 @@ class CollectionDetailsView(DetailView):
 
     slug_field = 'collection_slug'
 
-class CollectionEditView(UpdateView):
+class CollectionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Collection
     form_class = CollectionForm
-    template_name = 'collections/collection_form.html'
+    template_name = 'collections/edit_collection.html'
     slug_field = 'collection_slug'
+    slug_url_kwarg = 'slug'
+
+    def test_func(self):
+        collection = self.get_object()
+        return self.request.user == collection.created_by or self.request.user.is_superuser
 
     def get_success_url(self):
         return reverse_lazy('collections:details', kwargs={'slug': self.object.collection_slug})
 
-class CollectionDeleteView(DeleteView):
+class CollectionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Collection
     template_name = 'collections/delete_collection.html'
     success_url = reverse_lazy('collections:list')
     slug_field = 'collection_slug'
+    slug_url_kwarg = 'slug'
+
+    def test_func(self):
+        collection = self.get_object()
+        return self.request.user == collection.created_by or self.request.user.is_superuser

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from Reading_Club.accounts.views import UserLoginView, UserRegisterView, UserLogoutView, ProfileDetailsView, ProfileEditeView
+from Reading_Club.accounts.views import UserLoginView, UserRegisterView, UserLogoutView, ProfileDetailsView, ProfileEditView
 
 app_name = "accounts"
 
@@ -8,5 +8,5 @@ urlpatterns = [
     path('register/', UserRegisterView.as_view(), name="register"),
     path("logout/", UserLogoutView.as_view(), name="logout"),
     path("profile/", ProfileDetailsView.as_view(), name="details"),
-    path("profile/edit/", ProfileEditeView.as_view(), name="edit"),
+    path("profile/edit/", ProfileEditView.as_view(), name="edit"),
 ]

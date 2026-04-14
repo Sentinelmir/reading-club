@@ -1,9 +1,10 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from Reading_Club.book.forms import BookForm, EditBookForm
 from Reading_Club.book.models import Book
-
 
 class BooksListView(ListView):
     model = Book
@@ -39,9 +40,35 @@ class EditBookView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('books:details', kwargs={'slug': self.object.book_slug})
 
-class DeleteBookView(LoginRequiredMixin, DeleteView):
+class DeleteBookView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Book
     template_name = 'books/delete_book.html'
     success_url = reverse_lazy('books:list')
     slug_field = 'book_slug'
     slug_url_kwarg = 'slug'
+
+    def test_func(self):
+        book = self.get_object()
+        return self.request.user == book.created_by or self.request.user.is_superuser
+
+@login_required
+def toggle_favorite(request, slug):
+    book = get_object_or_404(Book, book_slug=slug)
+
+    if book in request.user.wishlist.all():
+        request.user.wishlist.remove(book)
+    else:
+        request.user.wishlist.add(book)
+
+    return redirect('books:list')
+
+@login_required
+def toggle_read(request, slug):
+    book = get_object_or_404(Book, book_slug=slug)
+
+    if book in request.user.read_list.all():
+        request.user.read_list.remove(book)
+    else:
+        request.user.read_list.add(book)
+
+    return redirect('books:list')

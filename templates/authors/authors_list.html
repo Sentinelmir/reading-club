@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Authors · BookWorld{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="mb-0">Authors</h1>
+</div>
+
+<div class="row g-4">
+  {% for author in authors %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <h3 class="h5 mb-2">
+            <a href="{% url 'author:details' author_slug=author.author_slug %}" class="text-decoration-none text-dark">
+              {{ author.publishing_name }}
+            </a>
+          </h3>
+
+          {% if author.real_name %}
+            <p class="small text-muted mb-2">Real name: {{ author.real_name }}</p>
+          {% endif %}
+
+          <p class="small text-muted mb-3">
+            Books: {{ author.books.count }}
+          </p>
+
+          <a href="{% url 'author:details' author_slug=author.author_slug %}" class="btn btn-sm btn-outline-secondary">
+            Open
+          </a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <p class="text-muted mb-0">No authors yet.</p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

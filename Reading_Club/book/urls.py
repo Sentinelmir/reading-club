@@ -1,5 +1,5 @@
 from django.urls import path, include
-from Reading_Club.book.views import BooksListView, BookDetailsView, AddNewBookView, EditBookView, DeleteBookView
+from Reading_Club.book.views import BooksListView, BookDetailsView, AddNewBookView, EditBookView, DeleteBookView, toggle_read, toggle_favorite
 
 app_name = 'books'
 
@@ -14,4 +14,6 @@ urlpatterns = [
         ]
     ),
 ),
+    path('<slug:slug>/favorite/', toggle_favorite, name='favorite'),
+    path('<slug:slug>/read/', toggle_read, name='read'),
 ]

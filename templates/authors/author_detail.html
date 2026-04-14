@@ -5,46 +5,51 @@
 <div class="card shadow-sm border-0 mb-4">
   <div class="card-body p-4">
     <div class="row g-4 align-items-start">
-      <div class="col-md-4 text-center">
+      <div class="col-md-4">
         {% if author.photo %}
-          <img src="{{ author.photo.url }}"
-               alt="{{ author.publishing_name }}"
-               class="img-fluid rounded shadow-sm"
-               style="max-height: 360px; object-fit: cover;">
+          <img
+            src="{{ author.photo.url }}"
+            alt="{{ author.publishing_name }}"
+            class="img-fluid rounded shadow-sm w-100"
+            style="max-height: 520px; object-fit: cover;"
+          >
         {% else %}
           <div class="border rounded d-flex align-items-center justify-content-center text-muted bg-light"
-               style="height: 360px;">
+               style="height: 420px;">
             No photo available
           </div>
         {% endif %}
       </div>
 
       <div class="col-md-8">
-        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-3">
+        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-3">
           <div>
             <h1 class="h2 mb-2">{{ author.publishing_name }}</h1>
 
             {% if author.real_name %}
               <p class="text-muted mb-2">Real name: {{ author.real_name }}</p>
             {% endif %}
-
-            <p class="mb-0">
-              Books in catalog:
-              <strong>{{ author.books.count }}</strong>
-            </p>
           </div>
 
           {% if request.user.is_authenticated %}
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 flex-wrap">
               <a href="{% url 'author:edit' author_slug=author.author_slug %}" class="btn btn-outline-secondary">
                 Edit
               </a>
-              <a href="{% url 'author:delete' author_slug=author.author_slug %}" class="btn btn-outline-danger">
+              <a href="{% url 'author:delete' author_slug=author.author_slug %}" class="btn btn-outline-dark">
                 Delete
               </a>
             </div>
           {% endif %}
         </div>
+
+        {% if author.description %}
+          <p class="mb-3">{{ author.description }}</p>
+        {% endif %}
+
+        <p class="mb-0">
+          Books in catalog: <strong>{{ author.books.count }}</strong>
+        </p>
       </div>
     </div>
   </div>
@@ -57,40 +62,7 @@
 
   <div class="row g-4">
     {% for book in author.books.all %}
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm border-0">
-          {% if book.book_cover %}
-            <img src="{{ book.book_cover.url }}"
-                 class="card-img-top"
-                 alt="{{ book.name }}"
-                 style="height: 300px; object-fit: cover;">
-          {% else %}
-            <div class="bg-light d-flex align-items-center justify-content-center text-muted"
-                 style="height: 300px;">
-              No cover
-            </div>
-          {% endif %}
-
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ book.name }}</h5>
-
-            <p class="card-text text-muted mb-2">
-              {{ book.genre|title }}
-              {% if book.year_of_publishing %}
-                · {{ book.year_of_publishing }}
-              {% endif %}
-            </p>
-
-            {% if book.description %}
-              <p class="card-text">{{ book.description|truncatechars:120 }}</p>
-            {% endif %}
-
-            <a href="{% url 'books:details' slug=book.book_slug %}" class="btn btn-primary mt-auto">
-              View details
-            </a>
-          </div>
-        </div>
-      </div>
+      {% include "common/book_card.html" %}
     {% empty %}
       <div class="col-12">
         <div class="alert alert-light border mb-0">

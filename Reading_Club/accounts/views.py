@@ -33,7 +33,7 @@ class ProfileDetailsView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class ProfileEditeView(LoginRequiredMixin, UpdateView):
+class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = BaseUser
     form_class = EditProfileForm
     template_name = 'accounts/edit_profile.html'
