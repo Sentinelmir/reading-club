@@ -1,11 +1,20 @@
 {% extends "base.html" %}
+{% block title %}Edit profile · BookWorld{% endblock %}
+
 {% block content %}
+<div class="d-flex justify-content-center py-5">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 700px;">
+    <h2 class="mb-4 text-center">Edit Profile</h2>
 
-<h2>Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
 
-<form method="post">
-  {% csrf_token %}
-  <button class="btn btn-primary">Save</button>
-</form>
-
+      <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-primary">Save</button>
+        <a href="{% url 'accounts:details' %}" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

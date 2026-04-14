@@ -1,16 +1,38 @@
 {% extends "base.html" %}
-{% block content %}
+{% block title %}Profile · BookWorld{% endblock %}
 
-<h2>Profile</h2>
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <div class="d-flex justify-content-between align-items-start gap-3">
+      <div>
+        <h1 class="h3 mb-2">{{ profile_user.nickname }}</h1>
+        <p class="text-muted mb-1">Username: {{ profile_user.username }}</p>
+        <p class="text-muted mb-0">Email: {{ profile_user.email }}</p>
+      </div>
+
+      <div class="text-end">
+        <a href="{% url 'accounts:edit' %}" class="btn btn-outline-secondary">Edit profile</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <h4>Favorites</h4>
-<div class="row g-3">
-  {% include "common/book_card.html" %}
+<div class="row g-3 mb-4">
+  {% for book in profile_user.wishlist.all %}
+    {% include "common/book_card.html" %}
+  {% empty %}
+    <p class="text-muted">No favorite books yet.</p>
+  {% endfor %}
 </div>
 
 <h4 class="mt-4">Read</h4>
 <div class="row g-3">
-  {% include "common/book_card.html" %}
+  {% for book in profile_user.read_list.all %}
+    {% include "common/book_card.html" %}
+  {% empty %}
+    <p class="text-muted">No books marked as read yet.</p>
+  {% endfor %}
 </div>
-
 {% endblock %}

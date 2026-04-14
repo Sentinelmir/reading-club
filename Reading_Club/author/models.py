@@ -5,7 +5,7 @@ from Reading_Club.book.validators import validate_file_size
 
 
 class Author(models.Model):
-    publishing_name = models.CharField(max_length=50, blank=False)
+    publishing_name = models.CharField(max_length=50, blank=False, unique=True)
     real_name = models.CharField(max_length=50, blank=True)
     author_slug = models.SlugField(max_length=50, blank=True, unique=True)
     photo = models.ImageField(upload_to="authors/", blank=True, null=True, validators=[validate_file_size])

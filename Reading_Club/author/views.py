@@ -1,15 +1,31 @@
-from django.shortcuts import render
-from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, UpdateView, DeleteView
+
+from Reading_Club.author.forms import AuthorEditForm
+from Reading_Club.author.models import Author
 
 
-class AuthorCreateView(View):
-    pass
+class AuthorDetailsView(DetailView):
+    model = Author
+    template_name = 'authors/author_detail.html'
+    context_object_name = 'author'
+    slug_field = 'author_slug'
+    slug_url_kwarg = 'author_slug'
 
-class AuthorDetailsView(View):
-    pass
+class AuthorEditView(LoginRequiredMixin, UpdateView):
+    model = Author
+    form_class = AuthorEditForm
+    template_name = 'authors/author_form.html'
+    slug_field = 'author_slug'
+    slug_url_kwarg = 'author_slug'
 
-class AuthorEditView(View):
-    pass
+    def get_success_url(self):
+        return reverse_lazy('author:details', kwargs={'author_slug': self.object.author_slug})
 
-class AuthorDeleteView(View):
-    pass
+class AuthorDeleteView(LoginRequiredMixin, DeleteView):
+    model = Author
+    template_name = 'authors/author_confirm_delete.html'
+    success_url = reverse_lazy('books:list')
+    slug_field = 'author_slug'
+    slug_url_kwarg = 'author_slug'
