@@ -51,14 +51,3 @@ class EditProfileForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-
-
-class ProfileDetailsForm(forms.ModelForm):
-    class Meta:
-        model = BaseUser
-        fields = ['username', 'nickname', 'email']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
-            'nickname': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'readonly': True}),
-        }

@@ -1,13 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from Reading_Club.book.models import Book
 from Reading_Club.review.forms import ReviewForm
 from Reading_Club.review.models import Review
 
+class ReviewListView(ListView):
+    model = Review
+    template_name = 'reviews/review_list.html'
+    context_object_name = 'reviews'
+    queryset = Review.objects.select_related('book', 'book__author', 'author').order_by('-date_of_publication')
 
-class ReviewCreateView(LoginRequiredMixin, CreateView):
+class ReviewCreateView(CreateView):
     model = Review
     form_class = ReviewForm
     template_name = 'reviews/review_form.html'
@@ -15,7 +20,12 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         book = get_object_or_404(Book, book_slug=self.kwargs['slug'])
         form.instance.book = book
-        form.instance.author = self.request.user
+
+        if self.request.user.is_authenticated:
+            form.instance.author = self.request.user
+        else:
+            form.instance.author = None
+
         return super().form_valid(form)
 
     def get_success_url(self):

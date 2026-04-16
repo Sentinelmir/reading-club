@@ -5,11 +5,46 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from Reading_Club.book.forms import BookForm, EditBookForm
 from Reading_Club.book.models import Book
+from Reading_Club.book.tasks import resize_book_cover
 
 class BooksListView(ListView):
     model = Book
     template_name = 'books/books_list.html'
     context_object_name = 'books'
+
+    def get_queryset(self):
+        queryset = Book.objects.select_related('author')
+
+        genre = self.request.GET.get('genre')
+        search = self.request.GET.get('search')
+        sort = self.request.GET.get('sort')
+
+        if genre:
+            queryset = queryset.filter(genre=genre)
+
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+
+        if sort == 'title_asc':
+            queryset = queryset.order_by('name')
+        elif sort == 'title_desc':
+            queryset = queryset.order_by('-name')
+        elif sort == 'year_asc':
+            queryset = queryset.order_by('year_of_publishing', 'name')
+        elif sort == 'year_desc':
+            queryset = queryset.order_by('-year_of_publishing', 'name')
+        else:
+            queryset = queryset.order_by('-id')
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['genres'] = Book.BookGenre.choices
+        context['selected_genre'] = self.request.GET.get('genre', '')
+        context['search_value'] = self.request.GET.get('search', '')
+        context['selected_sort'] = self.request.GET.get('sort', '')
+        return context
 
 
 class BookDetailsView(DetailView):
@@ -28,7 +63,9 @@ class AddNewBookView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        resize_book_cover.delay(self.object.pk)
+        return response
 
 class EditBookView(LoginRequiredMixin, UpdateView):
     model = Book
@@ -39,6 +76,12 @@ class EditBookView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('books:details', kwargs={'slug': self.object.book_slug})
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data.get("book_cover"):
+            resize_book_cover.delay(self.object.pk)
+        return response
 
 class DeleteBookView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Book

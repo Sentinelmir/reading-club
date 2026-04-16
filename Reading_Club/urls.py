@@ -13,6 +13,7 @@ urlpatterns = [
     path('collection/', include('Reading_Club.collection.urls')),
     path('review/', include('Reading_Club.review.urls')),
     path('author/', include('Reading_Club.author.urls')),
+    path('api/', include('Reading_Club.api.urls'))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

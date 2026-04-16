@@ -24,7 +24,7 @@ class Book(models.Model):
     author = models.ForeignKey(Author, on_delete=models.SET_NULL, related_name='books', blank=False, null=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="created_books", null=True, blank=True)
     year_of_publishing = models.PositiveIntegerField(blank=True, null=True)
-    book_cover = models.ImageField(upload_to="media/books_covers/", blank=True, null=True, validators=[validate_file_size])
+    book_cover = models.ImageField(upload_to="books_covers/", blank=True, null=True, validators=[validate_file_size])
 
     def save(self, *args, **kwargs):
         if not self.book_slug:

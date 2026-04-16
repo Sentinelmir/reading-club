@@ -29,6 +29,6 @@ class AuthorEditView(LoginRequiredMixin, UpdateView):
 class AuthorDeleteView(LoginRequiredMixin, DeleteView):
     model = Author
     template_name = 'authors/author_confirm_delete.html'
-    success_url = reverse_lazy('books:list')
+    success_url = reverse_lazy('author:list')
     slug_field = 'author_slug'
     slug_url_kwarg = 'author_slug'

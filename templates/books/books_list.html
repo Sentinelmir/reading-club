@@ -10,29 +10,48 @@
   <a href="{% url 'books:add' %}" class="btn btn-primary">Add book</a>
 </div>
 
+
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body">
-    <form class="row g-3">
+    <form method="get" class="row g-3">
       <div class="col-md-4">
-        <label class="form-label">Genre</label>
-        <select class="form-select">
-          <option>All genres</option>
-          <option>Fantasy</option>
-          <option>Drama</option>
-          <option>Romance</option>
-          <option>Science</option>
-          <option>History</option>
+        <label for="genre" class="form-label">Genre</label>
+        <select name="genre" id="genre" class="form-select">
+          <option value="">All genres</option>
+          {% for value, label in genres %}
+            <option value="{{ value }}" {% if selected_genre == value %}selected{% endif %}>
+              {{ label }}
+            </option>
+          {% endfor %}
         </select>
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">Search</label>
-        <input type="text" class="form-control" placeholder="Search by title">
+        <label for="search" class="form-label">Search</label>
+        <input
+          type="text"
+          name="search"
+          id="search"
+          class="form-control"
+          placeholder="Search by title"
+          value="{{ search_value }}"
+        >
       </div>
 
-      <div class="col-md-4 d-flex align-items-end">
-        <button class="btn btn-primary me-2" type="submit">Apply</button>
-        <a href="#" class="btn btn-outline-secondary">Reset</a>
+      <div class="col-md-4">
+        <label for="sort" class="form-label">Sort by</label>
+        <select name="sort" id="sort" class="form-select">
+          <option value="">Newest first</option>
+          <option value="title_asc" {% if selected_sort == 'title_asc' %}selected{% endif %}>Title A-Z</option>
+          <option value="title_desc" {% if selected_sort == 'title_desc' %}selected{% endif %}>Title Z-A</option>
+          <option value="year_asc" {% if selected_sort == 'year_asc' %}selected{% endif %}>Year ascending</option>
+          <option value="year_desc" {% if selected_sort == 'year_desc' %}selected{% endif %}>Year descending</option>
+        </select>
+      </div>
+
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Apply</button>
+        <a href="{% url 'books:list' %}" class="btn btn-outline-secondary">Reset</a>
       </div>
     </form>
   </div>
@@ -48,6 +67,5 @@
       </div>
     </div>
   {% endfor %}
-</div>
 </div>
 {% endblock %}

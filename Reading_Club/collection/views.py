@@ -30,7 +30,7 @@ class CollectionDetailsView(DetailView):
 class CollectionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Collection
     form_class = CollectionForm
-    template_name = 'collections/edit_collection.html'
+    template_name = 'collections/collection_form.html'
     slug_field = 'collection_slug'
     slug_url_kwarg = 'slug'
 

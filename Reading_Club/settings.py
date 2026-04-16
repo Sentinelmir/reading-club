@@ -26,9 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+DEBUG = os.getenv("DEBUG", "False") == "True"
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 PROJECT_APPS = [
@@ -36,7 +35,9 @@ PROJECT_APPS = [
     'Reading_Club.book',
     'Reading_Club.collection',
     'Reading_Club.review',
-    'Reading_Club.accounts'
+    'Reading_Club.accounts.apps.UserConfig',
+    'Reading_Club.api',
+    'rest_framework',
 ]
 
 INSTALLED_APPS = [
@@ -137,3 +138,10 @@ MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_REDIRECT_URL = "accounts:details"
 LOGOUT_REDIRECT_URL = "homepage"
 LOGIN_URL = "accounts:login"
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/0")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
