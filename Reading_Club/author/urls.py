@@ -1,10 +1,12 @@
 from django.urls import path, include
-from Reading_Club.author.views import AuthorDetailsView, AuthorDeleteView, AuthorEditView, AuthorsListView
+from Reading_Club.author.views import AuthorDetailsView, AuthorDeleteView, AuthorEditView, AuthorsListView, \
+    AuthorCreateView
 
 app_name = 'author'
 
 urlpatterns = [
     path('', AuthorsListView.as_view(), name='list'),
+    path('add/', AuthorCreateView.as_view(), name='add'),
     path('<slug:author_slug>/', include(
             [
                 path('', AuthorDetailsView.as_view(), name='details'),

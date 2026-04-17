@@ -9,7 +9,9 @@
       {% if book.book_cover %}
         <img src="{{ book.book_cover.url }}" class="w-100 book-cover-detail" alt="{{ book.name }}">
       {% else %}
-        <img src="https://via.placeholder.com/700x1050" class="w-100 book-cover-detail" alt="Book cover">
+        <div class="w-100 book-cover-detail d-flex align-items-center justify-content-center bg-light text-muted" style="min-height: 300px;">
+            No cover available
+        </div>
       {% endif %}
     </div>
   </div>
@@ -90,38 +92,15 @@
         </div>
 
         <div class="review-list">
-          {% for review in book.reviews.all %}
-            <article class="review-card">
-              <div class="review-header">
-                <div class="review-meta">
-                  <strong class="d-block review-author">{{ review.author|display_name }}</strong>
-                  <span class="text-muted small">
-                    {{ review.date_of_publication|date:"d M Y" }}
-                  </span>
-                </div>
-
-                <span class="badge text-bg-light review-rating-badge">★ {{ review.rating }}/5</span>
-              </div>
-
-              <p class="review-text">{{ review.text }}</p>
-
-              {% if request.user == review.author or request.user.is_superuser %}
-                <div class="review-actions">
-                  {% if request.user == review.author %}
-                    <a href="{% url 'reviews:edit' review.pk %}" class="btn btn-outline-secondary btn-sm">Edit</a>
-                  {% endif %}
-
-                  <a href="{% url 'reviews:delete' review.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
-                </div>
-              {% endif %}
-            </article>
-          {% empty %}
-            <div class="review-empty-state">
-              <p class="text-muted mb-2">No reviews yet.</p>
-              <p class="small text-muted mb-0">Be the first person to share an opinion about this book.</p>
-            </div>
-          {% endfor %}
+  {% for review in book.reviews.all %}
+    {% include "common/review_card.html" with review=review %}
+      {% empty %}
+        <div class="review-empty-state">
+          <p class="text-muted mb-2">No reviews yet.</p>
+          <p class="small text-muted mb-0">Be the first person to share an opinion about this book.</p>
         </div>
+      {% endfor %}
+    </div>
       </div>
     </div>
   </div>

@@ -24,8 +24,8 @@ class CollectionDetailsView(DetailView):
     model = Collection
     template_name = 'collections/collection_details.html'
     context_object_name = 'collection'
-
     slug_field = 'collection_slug'
+    slug_url_kwarg = 'slug'
 
 class CollectionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Collection

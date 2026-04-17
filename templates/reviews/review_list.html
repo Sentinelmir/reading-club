@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load account_extras %}
 {% block title %}Recent Reviews · BookWorld{% endblock %}
 
 {% block content %}
@@ -20,7 +21,7 @@
               </h2>
 
               <div class="text-muted small">
-                by
+
                 {% if review.book.author %}
                   <a href="{% url 'author:details' author_slug=review.book.author.author_slug %}" class="text-decoration-none text-muted">
                     {{ review.book.author }}
@@ -38,19 +39,9 @@
 
           <div class="d-flex justify-content-between align-items-center">
             <div class="text-muted small">
-              by
-              {% if review.author %}
-                <a href="{% url 'accounts:details' %}" class="text-decoration-none text-muted">
-                  {% if review.author.nickname %}
-                    {{ review.author.nickname }}
-                  {% else %}
-                    {{ review.author.username }}
-                  {% endif %}
-                </a>
-              {% else %}
-                Anonymous
-              {% endif %}
-              · {{ review.date_of_publication|date:"d M Y" }}
+              by {{ review.author|display_name }}
+              {{ review.date_of_publication|date:"d M Y" }}
+
             </div>
 
             <a href="{% url 'books:details' slug=review.book.book_slug %}" class="btn btn-sm btn-outline-secondary">

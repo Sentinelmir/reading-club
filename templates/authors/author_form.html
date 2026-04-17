@@ -1,18 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Edit Author · BookWorld{% endblock %}
+
+{% block title %}
+  {% if object %}Edit Author{% else %}Add Author{% endif %} · BookWorld
+{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-center py-5">
   <div class="card shadow-sm p-4" style="width: 100%; max-width: 700px;">
-    <h2 class="mb-4 text-center">Edit Author</h2>
+    <h2 class="mb-4 text-center">
+      {% if object %}Edit Author{% else %}Add Author{% endif %}
+    </h2>
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{ form.as_p }}
 
       <div class="d-flex gap-2 mt-3">
-        <button class="btn btn-primary">Save changes</button>
-        <a href="{% url 'author:details' author_slug=object.author_slug %}" class="btn btn-outline-secondary">Cancel</a>
+        <button class="btn btn-primary">
+          {% if object %}Save changes{% else %}Create author{% endif %}
+        </button>
+
+        {% if object %}
+          <a href="{% url 'author:details' author_slug=object.author_slug %}" class="btn btn-outline-secondary">Cancel</a>
+        {% else %}
+          <a href="{% url 'author:list' %}" class="btn btn-outline-secondary">Cancel</a>
+        {% endif %}
       </div>
     </form>
   </div>

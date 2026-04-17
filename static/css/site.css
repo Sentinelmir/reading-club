@@ -232,95 +232,7 @@ a.link-secondary:hover {
   color: #f5b301;
 }
 
-/* Book detail actions */
-.book-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-}
-
 /* Review section */
-.review-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 0.25rem;
-}
-
-.review-card {
-  border: 1px solid #d8c5b3;
-  border-radius: 18px;
-  padding: 0.95rem 1.1rem;
-  background: #fffdf9;
-}
-
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 0.45rem;
-}
-
-.review-meta {
-  min-width: 0;
-}
-
-.review-author {
-  line-height: 1.2;
-  margin-bottom: 0.1rem;
-}
-
-.review-text {
-  margin: 0;
-  color: #3e2f24;
-  line-height: 1.4;
-  white-space: pre-line;
-}
-
-.review-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.45rem;
-  margin-top: 0.35rem;
-  flex-wrap: wrap;
-}
-
-/* Shared sizing for action buttons */
-.book-actions .btn,
-.review-actions .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 76px;
-  min-height: 34px;
-  padding: 0.3rem 0.75rem;
-  line-height: 1.1;
-  text-align: center;
-}
-
-.review-empty-state {
-  border: 1px dashed #d8c5b3;
-  border-radius: 18px;
-  padding: 1rem 1.1rem;
-  background: #fffdf9;
-}
-
-@media (max-width: 576px) {
-  .review-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.45rem;
-  }
-
-  .review-actions,
-  .book-actions {
-    justify-content: flex-start;
-  }
-}
-
 .review-section-body {
   padding: 1.5rem 1.5rem;
 }
@@ -336,37 +248,64 @@ a.link-secondary:hover {
 .review-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   margin-top: 0;
 }
 
 .review-card {
   border: 1px solid #d8c5b3;
   border-radius: 18px;
-  padding: 0.9rem 1rem;
+  padding: 1rem 1.1rem;
   background: #fffdf9;
 }
 
-.review-header {
+.review-main {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 0.35rem;
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.review-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.review-meta {
+  margin-bottom: 0.85rem;
+}
+
+.review-author {
+  line-height: 1.2;
+  margin-bottom: 0.2rem;
 }
 
 .review-text {
   margin: 0;
   color: #3e2f24;
-  line-height: 1.4;
+  line-height: 1.5;
   white-space: pre-line;
+}
+
+.review-side {
+  flex: 0 0 auto;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.review-rating-badge {
+  font-size: 1rem;
+  padding: 0.35rem 0.75rem;
 }
 
 .review-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.45rem;
-  margin-top: 0.35rem;
   flex-wrap: wrap;
 }
 
@@ -381,28 +320,14 @@ a.link-secondary:hover {
   text-align: center;
 }
 
-@media (max-width: 991px) {
-  .review-section-body {
-    padding: 1.2rem;
-  }
+.review-empty-state {
+  border: 1px dashed #d8c5b3;
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  background: #fffdf9;
 }
 
-@media (max-width: 576px) {
-  .review-section-body {
-    padding: 1rem;
-  }
-
-  .review-section-head,
-  .review-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .review-actions {
-    justify-content: flex-start;
-  }
-}
-
+/* Book detail actions */
 .book-info-body {
   padding: 1.5rem 1.5rem;
 }
@@ -446,21 +371,42 @@ a.link-secondary:hover {
 }
 
 @media (max-width: 991px) {
+  .review-section-body {
+    padding: 1.2rem;
+  }
+
   .book-info-body {
     padding: 1.2rem;
   }
 }
 
 @media (max-width: 576px) {
+  .review-section-body {
+    padding: 1rem;
+  }
+
   .book-info-body {
     padding: 1rem;
   }
 
+  .review-section-head,
   .book-info-head {
     flex-direction: column;
     align-items: flex-start;
   }
 
+  .review-main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .review-side {
+    min-width: 0;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .review-actions,
   .book-actions {
     justify-content: flex-start;
   }

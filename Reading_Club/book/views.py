@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from Reading_Club.book.forms import BookForm, EditBookForm
 from Reading_Club.book.models import Book
 from Reading_Club.book.tasks import resize_book_cover
+from django.views.decorators.http import require_POST
 
 class BooksListView(ListView):
     model = Book
@@ -95,6 +96,7 @@ class DeleteBookView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == book.created_by or self.request.user.is_superuser
 
 @login_required
+@require_POST
 def toggle_favorite(request, slug):
     book = get_object_or_404(Book, book_slug=slug)
 
@@ -106,6 +108,7 @@ def toggle_favorite(request, slug):
     return redirect('books:list')
 
 @login_required
+@require_POST
 def toggle_read(request, slug):
     book = get_object_or_404(Book, book_slug=slug)
 

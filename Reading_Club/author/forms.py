@@ -1,8 +1,7 @@
 from django import forms
 from Reading_Club.author.models import Author
 
-
-class AuthorEditForm(forms.ModelForm):
+class AuthorCreateForm(forms.ModelForm):
     class Meta:
         model = Author
         fields = ['publishing_name', 'real_name', 'description', 'photo']
@@ -22,3 +21,15 @@ class AuthorEditForm(forms.ModelForm):
             }),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
+
+class AuthorEditForm(AuthorCreateForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['publishing_name'].help_text = (
+            'Be careful when editing publishing name.'
+        )
+        self.fields['description'].widget.attrs['placeholder'] = (
+            'Update author description'
+        )

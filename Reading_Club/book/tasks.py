@@ -1,7 +1,6 @@
-from io import BytesIO
 from celery import shared_task
-from django.core.files.base import ContentFile
 from PIL import Image
+
 from Reading_Club.book.models import Book
 
 
@@ -20,14 +19,4 @@ def resize_book_cover(book_id):
     with Image.open(image_path) as img:
         img = img.convert("RGB")
         img.thumbnail((600, 900))
-
-        buffer = BytesIO()
-        img.save(buffer, format="JPEG", quality=85)
-        buffer.seek(0)
-
-        original_name = book.book_cover.name.rsplit(".", 1)[0]
-        new_file_name = f"{original_name}.jpg"
-
-        book.book_cover.save(new_file_name, ContentFile(buffer.read()), save=False)
-
-    book.save(update_fields=["book_cover"])
+        img.save(image_path, format="JPEG", quality=85)
