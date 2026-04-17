@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from Reading_Club.book.forms import BookForm, EditBookForm
 from Reading_Club.book.models import Book
@@ -45,6 +45,12 @@ class BooksListView(ListView):
         context['selected_genre'] = self.request.GET.get('genre', '')
         context['search_value'] = self.request.GET.get('search', '')
         context['selected_sort'] = self.request.GET.get('sort', '')
+        if self.request.user.is_authenticated:
+            context['user_wishlist_ids'] = set(
+                self.request.user.wishlist.values_list('id', flat=True)
+            )
+        else:
+            context['user_wishlist_ids'] = set()
         return context
 
 
@@ -65,7 +71,8 @@ class AddNewBookView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         response = super().form_valid(form)
-        resize_book_cover.delay(self.object.pk)
+        if self.object.book_cover:
+            resize_book_cover.delay(self.object.pk)
         return response
 
 class EditBookView(LoginRequiredMixin, UpdateView):
@@ -105,7 +112,7 @@ def toggle_favorite(request, slug):
     else:
         request.user.wishlist.add(book)
 
-    return redirect('books:list')
+    return redirect(request.META.get('HTTP_REFERER', reverse('books:list')))
 
 @login_required
 @require_POST
@@ -117,4 +124,4 @@ def toggle_read(request, slug):
     else:
         request.user.read_list.add(book)
 
-    return redirect('books:list')
+    return redirect(request.META.get('HTTP_REFERER', reverse('books:list')))

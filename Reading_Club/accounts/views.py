@@ -32,6 +32,13 @@ class ProfileDetailsView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_wishlist_ids'] = set(
+            self.request.user.wishlist.values_list('id', flat=True)
+        )
+        return context
+
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = BaseUser

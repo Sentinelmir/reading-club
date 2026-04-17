@@ -6,10 +6,9 @@
            alt="{{ collection.title }}"
            style="height: 240px; object-fit: cover;">
     {% else %}
-      <img src="https://via.placeholder.com/500x300"
-           class="card-img-top"
-           alt="No cover"
-           style="height: 240px; object-fit: cover;">
+      <div class="w-100 book-cover-detail d-flex align-items-center justify-content-center bg-light text-muted" style="height: 240px;">
+            No cover available
+      </div>
     {% endif %}
 
     <div class="card-body d-flex flex-column">

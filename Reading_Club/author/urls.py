@@ -1,6 +1,5 @@
 from django.urls import path, include
-from Reading_Club.author.views import AuthorDetailsView, AuthorDeleteView, AuthorEditView, AuthorsListView, \
-    AuthorCreateView
+from Reading_Club.author.views import AuthorDetailsView, AuthorDeleteView, AuthorEditView, AuthorsListView, AuthorCreateView
 
 app_name = 'author'
 

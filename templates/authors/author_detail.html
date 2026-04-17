@@ -33,14 +33,16 @@
 
           {% if request.user.is_authenticated %}
             <div class="d-flex gap-2 flex-wrap">
-              <a href="{% url 'author:edit' author_slug=author.author_slug %}" class="btn btn-outline-secondary">
-                Edit
-              </a>
-              <a href="{% url 'author:delete' author_slug=author.author_slug %}" class="btn btn-outline-dark">
-                Delete
-              </a>
+                <a href="{% url 'author:edit' author_slug=author.author_slug %}" class="btn btn-outline-secondary">
+                    Edit
+                </a>
+                {% if request.user.is_staff or request.user.is_superuser %}
+                    <a href="{% url 'author:delete' author_slug=author.author_slug %}" class="btn btn-outline-dark">
+                        Delete
+                    </a>
+                {% endif %}
             </div>
-          {% endif %}
+        {% endif %}
         </div>
 
         {% if author.description %}

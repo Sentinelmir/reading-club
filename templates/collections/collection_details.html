@@ -10,10 +10,9 @@
          alt="{{ collection.title }}"
          style="max-height: 320px; object-fit: cover;">
   {% else %}
-    <img src="https://picsum.photos/seed/collection/1200/380"
-         class="card-img-top"
-         alt="Collection banner"
-         style="max-height: 320px; object-fit: cover;">
+      <div class="w-100 book-cover-detail d-flex align-items-center justify-content-center bg-light text-muted" style="height: 320px;">
+            No cover available
+      </div>
   {% endif %}
 
   <div class="card-body p-4">

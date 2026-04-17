@@ -40,21 +40,42 @@
   </div>
 </div>
 
-<h4>Favorites</h4>
+<h4 class="mt-5 mb-3">Favorites</h4>
 <div class="row g-3 mb-4">
   {% for book in profile_user.wishlist.all %}
-    {% include "common/book_card.html" %}
+    {% include "common/book_card.html" with book_col_class="col-6 col-md-4 col-xl-3" book_cover_height="260px" %}
   {% empty %}
     <p class="text-muted">No favorite books yet.</p>
   {% endfor %}
 </div>
 
-<h4 class="mt-4">Read</h4>
+<h4 class="mt-4 mb-3">Read</h4>
 <div class="row g-3">
   {% for book in profile_user.read_list.all %}
-    {% include "common/book_card.html" %}
+    {% include "common/book_card.html" with book_col_class="col-6 col-md-4 col-xl-3" book_cover_height="260px" %}
   {% empty %}
     <p class="text-muted">No books marked as read yet.</p>
   {% endfor %}
 </div>
+
+<h4 class="mt-5 mb-3">My Reviews</h4>
+<div class="row g-3 mb-4">
+  {% for review in profile_user.reviews.all %}
+    <div class="col-12 col-lg-6">
+      {% include "common/review_card.html" with review=review %}
+    </div>
+  {% empty %}
+    <p class="text-muted">No reviews written yet.</p>
+  {% endfor %}
+</div>
+
+<h4 class="mt-4 mb-3">My Collections</h4>
+<div class="row g-3 mb-4">
+  {% for collection in profile_user.created_collection.all %}
+    {% include "common/collection_card.html" %}
+  {% empty %}
+    <p class="text-muted">No collections created yet.</p>
+  {% endfor %}
+</div>
 {% endblock %}
+

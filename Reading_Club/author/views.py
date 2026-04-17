@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, DeleteView, ListView, CreateView
-from Reading_Club.author.forms import AuthorForm, AuthorCreateForm, AuthorEditForm
+from Reading_Club.author.forms import AuthorCreateForm, AuthorEditForm
 from Reading_Club.author.models import Author
 
 class AuthorsListView(ListView):

@@ -1,15 +1,14 @@
-<div class="col-md-6 col-lg-3">
+<div class="{{ book_col_class|default:'col-md-6 col-lg-3' }}">
   <div class="card h-100 shadow-sm border-0">
     {% if book.book_cover %}
       <img src="{{ book.book_cover.url }}"
            class="card-img-top"
            alt="{{ book.name }}"
-           style="height: 320px; object-fit: cover;">
+           style="height: {{ book_cover_height|default:'320px' }}; object-fit: cover;">
     {% else %}
-      <img src="https://via.placeholder.com/500x650"
-           class="card-img-top"
-           alt="No cover"
-           style="height: 320px; object-fit: cover;">
+      <div class="w-100 book-cover-detail d-flex align-items-center justify-content-center bg-light text-muted" style="height: {{ book_cover_height|default:'320px' }};">
+            No cover available
+      </div>
     {% endif %}
 
     <div class="card-body d-flex flex-column">
@@ -40,7 +39,7 @@
   {% if request.user.is_authenticated %}
     <form method="post" action="{% url 'books:favorite' slug=book.book_slug %}">
       {% csrf_token %}
-      <button type="submit" class="btn btn-sm {% if book in request.user.wishlist.all %}btn-danger{% else %}btn-outline-danger{% endif %}">
+      <button type="submit" class="btn btn-sm {% if book.id in user_wishlist_ids %}btn-danger{% else %}btn-outline-danger{% endif %}">
         ♥
       </button>
     </form>
