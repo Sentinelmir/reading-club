@@ -1,4 +1,5 @@
 from django import template
+from django.urls import reverse
 
 register = template.Library()
 
@@ -6,13 +7,13 @@ register = template.Library()
 def display_name(user):
     if not user:
         return "Anonymous"
+    return getattr(user, "nickname", None) or getattr(user, "username", None) or "Anonymous"
 
-    nickname = getattr(user, "nickname", None)
-    if nickname:
-        return nickname
 
-    username = getattr(user, "username", None)
-    if username:
-        return username
-
-    return "Anonymous"
+@register.simple_tag
+def profile_link(user, css_class=""):
+    if not user:
+        return "Anonymous"
+    name = getattr(user, "nickname", None) or getattr(user, "username", None) or "Anonymous"
+    url = reverse("accounts:public_profile", kwargs={"username": user.username})
+    return f'<a href="{url}" class="text-decoration-none {css_class}">{name}</a>'

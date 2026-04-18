@@ -1,3 +1,5 @@
+{% load account_extras %}
+
 <div class="col-md-6 col-lg-4">
   <div class="card h-100 shadow-sm border-0">
     {% if collection.cover %}
@@ -16,7 +18,7 @@
 
       <p class="small text-muted mb-2">
         {% if collection.created_by %}
-          By {{ collection.created_by }}
+          By {% autoescape off %}{% profile_link collection.created_by "text-muted" %}{% endautoescape %}
         {% else %}
           By unknown user
         {% endif %}

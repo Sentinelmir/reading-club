@@ -4,7 +4,11 @@
   <div class="review-main">
     <div class="review-content">
       <div class="review-meta">
-        <strong class="d-block review-author">{{ review.author|display_name }}</strong>
+        {% if review.author %}
+          <strong class="d-block review-author">
+              {% autoescape off %}{% profile_link review.author "fw-bold text-dark" %}{% endautoescape %}
+            </strong>
+        {% endif %}
         <span class="text-muted small">
           {{ review.date_of_publication|date:"d M Y" }}
         </span>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load account_extras %}
 {% block title %}Home · BookWorld{% endblock %}
 
 {% block content %}
@@ -103,16 +104,7 @@
 
             <div class="d-flex justify-content-between align-items-center">
               <div class="text-muted small">
-                by
-                {% if review.author %}
-                  {% if review.author.nickname %}
-                    {{ review.author.nickname }}
-                  {% else %}
-                    {{ review.author.username }}
-                  {% endif %}
-                {% else %}
-                  Anonymous
-                {% endif %}
+                by {% autoescape off %}{% profile_link review.author "text-dark" %}{% endautoescape %}
                 · {{ review.date_of_publication|date:"d M Y" }}
               </div>
 

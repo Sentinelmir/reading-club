@@ -21,7 +21,7 @@ class RegisterUserForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.fields['nickname'].required = True
         self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Enter password'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Repeat password'})
 
@@ -38,20 +38,23 @@ class LoginUserForm(AuthenticationForm):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = BaseUser
-        fields = ['username', 'nickname', 'email', 'profile_image']
+        fields = ['username', 'nickname', 'email', 'bio', 'profile_image']
         labels = {
             'username': 'Username',
             'nickname': 'Nickname',
             'email': 'Email',
+            'bio': 'About me',
             'profile_image': 'Profile image',
         }
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'nickname': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Tell others a bit about yourself...'}),
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].disabled = True
+        self.fields['nickname'].required = True

@@ -1,5 +1,6 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
 
@@ -48,3 +49,21 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+class PublicProfileView(DetailView):
+    model = BaseUser
+    template_name = 'accounts/user_profile.html'
+    context_object_name = 'profile_user'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(BaseUser, username=self.kwargs['username'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['user_wishlist_ids'] = set(
+                self.request.user.wishlist.values_list('id', flat=True)
+            )
+        else:
+            context['user_wishlist_ids'] = set()
+        return context
