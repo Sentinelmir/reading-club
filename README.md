@@ -24,7 +24,7 @@ A Django-based web application for tracking your reading life — add books, wri
 ### 1. Clone and install dependencies
 
 ```bash
-git clone <your-repo-url>
+git clone Sentinelmir/reading-club
 cd Reading-Club
 python -m venv .venv
 source .venv/bin/activate
