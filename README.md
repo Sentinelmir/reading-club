@@ -72,6 +72,6 @@ celery -A Reading_Club worker -l info
 
 ## Deployment
 
-Deployed at: ``
+Deployed at: `http://13.63.149.182/`
 
 For production, set `DEBUG=False` and add your domain to `ALLOWED_HOSTS`.
