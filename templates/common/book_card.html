@@ -1,15 +1,17 @@
 <div class="{{ book_col_class|default:'col-md-6 col-lg-3' }}">
   <div class="card h-100 shadow-sm border-0">
-    {% if book.book_cover %}
-      <img src="{{ book.book_cover.url }}"
-           class="card-img-top"
-           alt="{{ book.name }}"
-           style="height: {{ book_cover_height|default:'320px' }}; object-fit: cover;">
-    {% else %}
-      <div class="w-100 book-cover-detail d-flex align-items-center justify-content-center bg-light text-muted" style="height: {{ book_cover_height|default:'320px' }};">
-            No cover available
-      </div>
-    {% endif %}
+    <a href="{% url 'books:details' book.book_slug %}">
+      {% if book.book_cover %}
+        <img src="{{ book.book_cover.url }}"
+             class="card-img-top"
+             alt="{{ book.name }}"
+             style="height: {{ book_cover_height|default:'320px' }}; object-fit: cover;">
+      {% else %}
+        <div class="w-100 book-cover-detail d-flex align-items-center justify-content-center bg-light text-muted" style="height: {{ book_cover_height|default:'320px' }};">
+              No cover available
+        </div>
+      {% endif %}
+    </a>
 
     <div class="card-body d-flex flex-column">
       <h3 class="h6 mb-1">{{ book.name }}</h3>
