@@ -10,16 +10,6 @@ class CollectionListView(ListView):
     template_name = 'collections/collection_list.html'
     context_object_name = 'collections'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context['user_wishlist_ids'] = set(
-                self.request.user.wishlist.values_list('id', flat=True)
-            )
-        else:
-            context['user_wishlist_ids'] = set()
-        return context
-
 class CreateCollectionView(LoginRequiredMixin, CreateView):
     model = Collection
     form_class = CollectionForm
@@ -36,6 +26,16 @@ class CollectionDetailsView(DetailView):
     context_object_name = 'collection'
     slug_field = 'collection_slug'
     slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['user_wishlist_ids'] = set(
+                self.request.user.wishlist.values_list('id', flat=True)
+            )
+        else:
+            context['user_wishlist_ids'] = set()
+        return context
 
 class CollectionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Collection
