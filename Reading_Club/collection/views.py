@@ -4,7 +4,6 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from Reading_Club.collection.forms import CollectionForm
 from Reading_Club.collection.models import Collection
 
-
 class CollectionListView(ListView):
     model = Collection
     template_name = 'collections/collection_list.html'
@@ -19,6 +18,7 @@ class CreateCollectionView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+
 
 class CollectionDetailsView(DetailView):
     model = Collection
@@ -37,6 +37,7 @@ class CollectionDetailsView(DetailView):
             context['user_wishlist_ids'] = set()
         return context
 
+
 class CollectionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Collection
     form_class = CollectionForm
@@ -50,6 +51,7 @@ class CollectionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('collections:details', kwargs={'slug': self.object.collection_slug})
+
 
 class CollectionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Collection
