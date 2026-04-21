@@ -36,13 +36,13 @@ pip install -r requirements.txt
 Copy the example below and fill in your values:
 
 ```
-SECRET_KEY=your-secret-key-here
+SECRET_KEY='django-insecure-w(hcwlpif)j)bv5xq_-w&-w51uzj8itqmp9ubq*fj4tkzo&_!#'
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
 
 DB_NAME=readingclub_db
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
+DB_USER=admin
+DB_PASSWORD=12345
 DB_HOST=127.0.0.1
 DB_PORT=5432
 
