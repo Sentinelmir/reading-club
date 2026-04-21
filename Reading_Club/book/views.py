@@ -12,6 +12,7 @@ class BooksListView(ListView):
     model = Book
     template_name = 'books/books_list.html'
     context_object_name = 'books'
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = Book.objects.select_related('author')
