@@ -28,19 +28,7 @@
         <li class="nav-item"><a class="nav-link" href="{% url 'author:list' %}">Authors</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'collections:list' %}">Collections</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'reviews:list' %}">Reviews</a></li>
-        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">API</a><ul class="dropdown-menu"><li>
-            <a class="dropdown-item" href="{% url 'api:books-list-api' %}">
-                Books API
-            </a>
-            </li>
-            <li>
-            <a class="dropdown-item" href="{% url 'api:authors-list-api' %}">
-                Authors API
-            </a>
-            </li>
-  </ul>
-</li>
-      </ul>
+    </ul>
 
       <div class="d-flex gap-2 align-items-center">
         {% if request.user.is_authenticated %}
