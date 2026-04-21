@@ -46,7 +46,7 @@
   </div>
 </div>
 
-<h4 class="mt-5 mb-3">Favorites</h4>
+<h4 class="mt-5 mb-3">{% if request.user == profile_user %}My Favorites{% else %}{{ profile_user.nickname }}'s Favorites{% endif %}</h4>
 {% with books=profile_user.wishlist.all section_id="carousel-favorites" %}
   {% if books %}
     <div class="book-carousel-wrapper mb-4">
@@ -65,7 +65,7 @@
   {% endif %}
 {% endwith %}
 
-<h4 class="mt-4 mb-3">Read</h4>
+<h4 class="mt-4 mb-3">{% if request.user == profile_user %}My Read List{% else %}{{ profile_user.nickname }}'s Read List{% endif %}</h4>
 {% with books=profile_user.read_list.all section_id="carousel-read" %}
   {% if books %}
     <div class="book-carousel-wrapper mb-4">
@@ -84,7 +84,7 @@
   {% endif %}
 {% endwith %}
 
-<h4 class="mt-5 mb-3">My Reviews</h4>
+<h4 class="mt-5 mb-3">{% if request.user == profile_user %}My Reviews{% else %}{{ profile_user.nickname }}'s Reviews{% endif %}</h4>
 <div class="row g-3 mb-4">
   {% for review in profile_user.reviews.all %}
     <div class="col-12 col-lg-6">
@@ -95,7 +95,7 @@
   {% endfor %}
 </div>
 
-<h4 class="mt-4 mb-3">My Collections</h4>
+<h4 class="mt-4 mb-3">{% if request.user == profile_user %}My Collections{% else %}{{ profile_user.nickname }}'s Collections{% endif %}</h4>
 <div class="row g-3 mb-4">
   {% for collection in profile_user.created_collection.all %}
     {% include "common/collection_card.html" %}
@@ -106,7 +106,6 @@
 {% endblock %}
 
 {% block extra_js %}
-
 <script>
   function scrollCarousel(id, direction) {
     const carousel = document.getElementById(id);
