@@ -13,7 +13,7 @@
 
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body">
-    <form method="get" class="row g-3">
+    <form method="get" class="row g-3" id="filter-form">
       <div class="col-md-4">
         <label for="genre" class="form-label">Genre</label>
         <select name="genre" id="genre" class="form-select">
@@ -27,15 +27,16 @@
       </div>
 
       <div class="col-md-4">
-        <label for="search" class="form-label">Search</label>
+        <label for="search-live" class="form-label">Search</label>
         <input
           type="text"
-          name="search"
-          id="search"
+          id="search-live"
           class="form-control"
           placeholder="Search by title"
           value="{{ search_value }}"
+          autocomplete="off"
         >
+        <input type="hidden" name="search" id="search-hidden" value="{{ search_value }}">
       </div>
 
       <div class="col-md-4">
@@ -57,7 +58,11 @@
   </div>
 </div>
 
-<div class="row g-4">
+<div id="no-results-msg" class="alert alert-info mb-4 d-none">
+  No books match your search.
+</div>
+
+<div class="row g-4" id="books-grid">
   {% for book in books %}
     {% include "common/book_card.html" %}
   {% empty %}
@@ -68,4 +73,35 @@
     </div>
   {% endfor %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const searchInput = document.getElementById('search-live');
+  const searchHidden = document.getElementById('search-hidden');
+  const booksGrid = document.getElementById('books-grid');
+  const noResultsMsg = document.getElementById('no-results-msg');
+
+  const allCards = Array.from(booksGrid.children).filter(el => el.querySelector('h3'));
+
+  searchInput.addEventListener('input', function () {
+    const query = this.value.trim().toLowerCase();
+    searchHidden.value = this.value.trim();
+
+    let visibleCount = 0;
+
+    allCards.forEach(function (card) {
+      const title = card.querySelector('h3').textContent.toLowerCase();
+      const matches = title.includes(query);
+      card.style.display = matches ? '' : 'none';
+      if (matches) visibleCount++;
+    });
+
+    noResultsMsg.classList.toggle('d-none', visibleCount > 0 || query === '');
+  });
+
+  document.getElementById('filter-form').addEventListener('submit', function () {
+    searchHidden.value = searchInput.value.trim();
+  });
+</script>
 {% endblock %}
