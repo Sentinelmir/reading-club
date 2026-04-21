@@ -26,7 +26,7 @@
           {% endif %}
         </div>
 
-      <div>
+        <div>
           <h1 class="h3 mb-2">{{ profile_user.nickname }}</h1>
           {% if profile_user.bio %}
             <p class="text-muted mb-2">{{ profile_user.bio }}</p>
@@ -38,31 +38,51 @@
       </div>
 
       <div class="text-end">
-          {% if request.user == profile_user %}
-            <a href="{% url 'accounts:edit' %}" class="btn btn-outline-secondary">Edit profile</a>
-          {% endif %}
-        </div>
+        {% if request.user == profile_user %}
+          <a href="{% url 'accounts:edit' %}" class="btn btn-outline-secondary">Edit profile</a>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>
 
 <h4 class="mt-5 mb-3">Favorites</h4>
-<div class="row g-3 mb-4">
-  {% for book in profile_user.wishlist.all %}
-    {% include "common/book_card.html" with book_col_class="col-6 col-md-4 col-xl-3" book_cover_height="260px" %}
-  {% empty %}
-    <p class="text-muted">No favorite books yet.</p>
-  {% endfor %}
-</div>
+{% with books=profile_user.wishlist.all section_id="carousel-favorites" %}
+  {% if books %}
+    <div class="book-carousel-wrapper mb-4">
+      <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('{{ section_id }}', -1)" aria-label="Previous">&#8592;</button>
+      <div class="book-carousel" id="{{ section_id }}">
+        {% for book in books %}
+          <div class="carousel-card-slot">
+            {% include "common/book_card.html" with book_col_class="carousel-inner-card" book_cover_height="260px" %}
+          </div>
+        {% endfor %}
+      </div>
+      <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('{{ section_id }}', 1)" aria-label="Next">&#8594;</button>
+    </div>
+  {% else %}
+    <p class="text-muted mb-4">No favorite books yet.</p>
+  {% endif %}
+{% endwith %}
 
 <h4 class="mt-4 mb-3">Read</h4>
-<div class="row g-3">
-  {% for book in profile_user.read_list.all %}
-    {% include "common/book_card.html" with book_col_class="col-6 col-md-4 col-xl-3" book_cover_height="260px" %}
-  {% empty %}
-    <p class="text-muted">No books marked as read yet.</p>
-  {% endfor %}
-</div>
+{% with books=profile_user.read_list.all section_id="carousel-read" %}
+  {% if books %}
+    <div class="book-carousel-wrapper mb-4">
+      <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('{{ section_id }}', -1)" aria-label="Previous">&#8592;</button>
+      <div class="book-carousel" id="{{ section_id }}">
+        {% for book in books %}
+          <div class="carousel-card-slot">
+            {% include "common/book_card.html" with book_col_class="carousel-inner-card" book_cover_height="260px" %}
+          </div>
+        {% endfor %}
+      </div>
+      <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('{{ section_id }}', 1)" aria-label="Next">&#8594;</button>
+    </div>
+  {% else %}
+    <p class="text-muted mb-4">No books marked as read yet.</p>
+  {% endif %}
+{% endwith %}
 
 <h4 class="mt-5 mb-3">My Reviews</h4>
 <div class="row g-3 mb-4">
@@ -85,3 +105,12 @@
 </div>
 {% endblock %}
 
+{% block extra_js %}
+
+<script>
+  function scrollCarousel(id, direction) {
+    const carousel = document.getElementById(id);
+    carousel.scrollBy({ left: direction * 432, behavior: 'smooth' });
+  }
+</script>
+{% endblock %}
